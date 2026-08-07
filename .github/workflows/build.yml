@@ -1,0 +1,44 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Configurar Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.2'
+          channel: 'stable'
+
+      - name: Instalar Flet CLI
+        run: |
+          pip install flet
+
+      - name: Compilar App para iOS (Sem Assinatura Digital)
+        run: |
+          flet build ios --no-codesign
+
+      - name: Compactar App do iOS para Download
+        run: |
+          cd build/ios/iphoneos
+          zip -r ../../../vida_do_cuei_ios.zip Runner.app
+
+      - name: Disponibilizar o App iOS para Download (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: App-iOS-Vida-do-Cuei
+          path: vida_do_cuei_ios.zip
