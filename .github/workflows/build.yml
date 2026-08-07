@@ -28,14 +28,14 @@ jobs:
         run: |
           pip install flet
 
-      - name: Compilar App para iOS (IPA sem assinatura)
+      - name: Compilar App para iOS
         run: |
-          flet build ipa --flutter-build-args "--no-codesign"
+          flet build ipa --flutter-build-args=--no-codesign
 
-      - name: Compactar App do iOS para Download
+      - name: Compactar Arquivos Gerados do iOS
         run: |
-          cd build/ipa
-          zip -r ../../vida_do_cuei_ios.zip .
+          cd build/ipa || cd build/ios || cd build
+          zip -r ../vida_do_cuei_ios.zip .
 
       - name: Disponibilizar o App iOS para Download (Artifact)
         uses: actions/upload-artifact@v4
