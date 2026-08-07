@@ -24,18 +24,18 @@ jobs:
           flutter-version: '3.22.2'
           channel: 'stable'
 
-      - name: Instalar Flet CLI
+      - name: Instalar Flet e Dependências
         run: |
           pip install flet
 
-      - name: Compilar App para iOS (Sem Assinatura Digital)
+      - name: Compilar App para iOS (IPA sem assinatura)
         run: |
-          flet build ios --no-codesign
+          flet build ipa --no-codesign
 
       - name: Compactar App do iOS para Download
         run: |
-          cd build/ios/iphoneos
-          zip -r ../../../vida_do_cuei_ios.zip Runner.app
+          cd build/ipa
+          zip -r ../../vida_do_cuei_ios.zip .
 
       - name: Disponibilizar o App iOS para Download (Artifact)
         uses: actions/upload-artifact@v4
